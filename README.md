@@ -1,9 +1,10 @@
 # Game for CompSCI
 <sub>*A GrahamSH project*</sub>
-
+![assets/cover.png](assets/cover.png)
 ## How to run
+To start, clone this repository by running `git clone https://github.com/GrahamSH-LLK/game.git` in your terminal. Then, go into the directory by running `cd game`. 
 
-SFML is fairly hard to install. I recommend using the my precompiled binary of this game [here](https://raw.githubusercontent.com/GrahamSH-LLK/game/main/GAME).
+SFML is fairly hard to install. I recommend using the my precompiled binary of this game at `bin/GAME`. You should be able to open it by running `./bin/GAME`. If you can't, you can run `chmod +x ./bin/GAME` to make it executable.
 
 If you want to install it yourself and compile, you can follow these instructions. 
 
@@ -12,5 +13,5 @@ If you want to install it yourself and compile, you can follow these instruction
 2. Install SFML by running `brew install sfml pkg-config`
 3. Clone this repository by running `git clone https://github.com/GrahamSH-LLK/game.git`
 4. Go into the directory by running `cd game`
-5. Compile the game by running `g++ $(pkg-config --cflags --libs sfml-graphics) main.cpp -o GAME && ./GAME`
+5. Compile the game by running `g++ $(pkg-config --cflags --libs sfml-graphics) main.cpp -o bin/GAME && ./bin/GAME`
 

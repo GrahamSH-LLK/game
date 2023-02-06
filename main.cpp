@@ -21,19 +21,19 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1600, 1200), "Graham's Super Cool Game");
     // Load a sprite to display
     sf::Texture stafftexture;
-    stafftexture.loadFromFile("staff.png");
+    stafftexture.loadFromFile("assets/staff.png");
     sf::Vector2u sizeS = stafftexture.getSize();
     sf::Sprite staff(stafftexture);
     staff.setOrigin(sizeS.x / 2, sizeS.y / 2);
     staff.setScale(2, 2);
     window.setMouseCursorVisible(false);
     sf::Texture texture;
-    if (!texture.loadFromFile("monstah.png"))
+    if (!texture.loadFromFile("assets/monstah.png"))
         return EXIT_FAILURE;
     sf::Sprite sprites[4] = {sf::Sprite(texture), sf::Sprite(texture), sf::Sprite(texture), sf::Sprite(texture)};
 
     sf::Texture titleTexture;
-    titleTexture.loadFromFile("bg.png");
+    titleTexture.loadFromFile("assets/bg.png");
     sf::Sprite title(titleTexture);
     title.setScale(5.5, 5.5);
     title.setPosition(100, 200);
@@ -53,7 +53,7 @@ int main()
         sf::Vector2f(0.2f, 0.2f),
     };
     sf::Font font;
-    if (!font.loadFromFile("pixeloid.ttf"))
+    if (!font.loadFromFile("assets/pixeloid.ttf"))
         return EXIT_FAILURE;
 
     int clicks = 0;
