@@ -12,7 +12,7 @@ bool comp(int a, int b)
 {
     return (a < b);
 }
-
+int level = 0;
 int main()
 {
     srand(time(NULL));
@@ -22,13 +22,29 @@ int main()
     // Load textures
     sf::Texture stafftexture;
     stafftexture.loadFromFile("assets/staff.png");
+
     sf::Texture titleTexture;
     titleTexture.loadFromFile("assets/bg.png");
+
     sf::Texture texture;
     texture.loadFromFile("assets/monstah.png");
 
-    // Create Sprites
+    sf::Texture desertTexture;
+    desertTexture.loadFromFile("assets/desert.jpeg");
 
+
+    sf::Texture oceanTexture;
+    oceanTexture.loadFromFile("assets/ocean.jpg");
+    sf::Vector2u sizeOcean = oceanTexture.getSize();
+    sf::Vector2u sizeDesert = desertTexture.getSize();
+
+    // Create Sprites
+    // first level background
+    sf::Sprite desertBg(desertTexture);
+    desertBg.setOrigin(sizeDesert.x / 2, sizeDesert.y/2);
+        sf::Sprite oceanBg(oceanTexture);
+    oceanBg.setOrigin(sizeOcean.x/2, sizeOcean.y/2);
+    oceanBg.setScale(2,2);
     // cursor texture
     sf::Vector2u sizeS = stafftexture.getSize();
     sf::Sprite staff(stafftexture);
@@ -67,6 +83,9 @@ int main()
         return EXIT_FAILURE;
 
     int clicks = 0; // points
+    int level = 0;
+    sf::Sprite levels[2] = {desertBg, oceanBg};
+
     bool started = false;
     while (window.isOpen()) // run game loop while the window is open
     {
@@ -103,7 +122,8 @@ int main()
             }
             continue;
         }
-
+        window.draw(levels[level]);
+        levels[level].setPosition(window.getSize().x /2, window.getSize().y / 2);
         for (int i = 0; i < 4; i++) // run bouncing and click listener for each sprite
         {
             // get respective variables for sprite
@@ -121,7 +141,7 @@ int main()
                 increment.x = -increment.x;
             }
             if ((spritePosition.y + (size.y / 20) >
-                     windowSize.y &&
+                     windowSize.y - 400 &&
                  increment.y > 0) ||
                 (spritePosition.y - (size.y / 20) < 0 &&
                  increment.y < 0))
@@ -133,11 +153,11 @@ int main()
             window.draw(sprite);
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && isInArea(sf::Mouse::getPosition(window), sprite.getPosition()))
             {
-                sprite.setPosition(rand() % window.getSize().x + 100, rand() % window.getSize().y + 100);
+                sprite.setPosition(rand() % window.getSize().x + 100, (window.getSize().y - 400));
                 clicks += 1;
                 double roundedClicks = clicks / 20;
                 increment.y *= min(std::max(roundedClicks, 1.0), 1.04);
-                increment.x *= min(std::max(roundedClicks, 1.0), 1.04); // speed up if 
+                increment.x *= min(std::max(roundedClicks, 1.0), 1.04); // speed up if
             }
         }
         staff.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
@@ -147,7 +167,11 @@ int main()
         sf::Text text(to_string((clicks)), font, 64);
         text.setPosition(10, 10);
         window.draw(text);
-        
+        if (clicks == 100)
+        {
+            level++;
+            clicks = 0;
+        }
         // Update the window
         window.display();
     }
