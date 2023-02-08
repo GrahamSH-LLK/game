@@ -13,12 +13,13 @@ bool comp(int a, int b)
     return (a < b);
 }
 int level = 0;
+int ticks = 0;
 int main()
 {
-    srand(time(NULL));
+    srand((unsigned)time(NULL));
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1600, 1200), "Graham's Super Cool Game");
-
+    window.setFramerateLimit(60);
     // Load textures
     sf::Texture stafftexture;
     stafftexture.loadFromFile("assets/staff.png");
@@ -58,7 +59,7 @@ int main()
     title.setPosition(100, 200);
 
     // four bouncing sprites
-    sf::Sprite sprites[4] = {sf::Sprite(texture), sf::Sprite(texture), sf::Sprite(texture), sf::Sprite(texture)};
+    sf::Sprite sprites[3] = {sf::Sprite(texture), sf::Sprite(texture), sf::Sprite(texture)};
 
     sf::Vector2u size = texture.getSize(); // get size of texture for monster
 
@@ -70,11 +71,11 @@ int main()
     }
 
     // vectors to handle bouncing, one for each sprite
-    sf::Vector2f increments[4] = {
-        sf::Vector2f(0.2f, 0.2f),
-        sf::Vector2f(0.2f, 0.2f),
-        sf::Vector2f(0.2f, 0.2f),
-        sf::Vector2f(0.2f, 0.2f),
+    sf::Vector2f increments[3] = {
+        sf::Vector2f(5.0f, 5.0f),
+        sf::Vector2f(5.0f, 5.0f),
+        sf::Vector2f(5.0f, 5.0f)
+        
     };
 
     // load font
@@ -85,11 +86,11 @@ int main()
     int clicks = 0; // points
     int level = 0;
     sf::Sprite levels[2] = {desertBg, oceanBg};
-
+    sf::Clock clock;
     bool started = false;
     while (window.isOpen()) // run game loop while the window is open
     {
-
+        
         // process events from the library -- for our purposes, just window close
         sf::Event event;
 
@@ -107,7 +108,7 @@ int main()
         }
 
         // fill screen with yellow color
-        window.clear(sf::Color(243, 196, 85, 255));
+        window.clear(sf::Color(233, 196, 85, 255));
 
         if (!started) // if game isn't started, display logo and start screen + listen for clicks
         {
@@ -124,10 +125,10 @@ int main()
         }
         window.draw(levels[level]);
         levels[level].setPosition(window.getSize().x /2, window.getSize().y / 2);
-        for (int i = 0; i < 4; i++) // run bouncing and click listener for each sprite
+        for (int i = 0; i < 3; i++) // run bouncing and click listener for each sprite
         {
             // get respective variables for sprite
-            sf::Sprite &sprite = sprites[i];
+            sf::Sprite &sprite = sprites[i % 3];
             sf::Vector2f &increment = increments[i];
             sf::Vector2u windowSize = window.getSize();
             sf::Vector2f spritePosition = sprite.getPosition();
@@ -141,30 +142,33 @@ int main()
                 increment.x = -increment.x;
             }
             if ((spritePosition.y + (size.y / 20) >
-                     windowSize.y - 400 &&
+                     windowSize.y - 300 &&
                  increment.y > 0) ||
                 (spritePosition.y - (size.y / 20) < 0 &&
                  increment.y < 0))
             { // bounce on y axis
-                increment.y = -increment.y;
+                increment.y = -increment.y ;
             }
 
             sprite.setPosition(sprite.getPosition() + increment); // set position to the current position + the computed directional change
             window.draw(sprite);
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && isInArea(sf::Mouse::getPosition(window), sprite.getPosition()))
             {
-                sprite.setPosition(rand() % window.getSize().x + 100, (window.getSize().y - 400));
+                sprite.setPosition(rand() % window.getSize().x + 100, (window.getSize().y - 300));
                 clicks += 1;
                 double roundedClicks = clicks / 20;
-                increment.y *= min(std::max(roundedClicks, 1.0), 1.04);
-                increment.x *= min(std::max(roundedClicks, 1.0), 1.04); // speed up if
+                increment.y *= min(std::max(roundedClicks, 1.0), 1.03);
+                increment.x *= min(std::max(roundedClicks, 1.0), 1.03); // speed up if
+            }
+            if (level == 1) {
+                texture.loadFromFile("assets/tinted.png");
             }
         }
         staff.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
         window.draw(staff);
 
         // Write the score in the corner
-        sf::Text text(to_string((clicks)), font, 64);
+        sf::Text text(to_string((clicks)), font, 63);
         text.setPosition(10, 10);
         window.draw(text);
         if (clicks == 100)
