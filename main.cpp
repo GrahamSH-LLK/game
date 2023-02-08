@@ -142,7 +142,7 @@ int main()
                 increment.x = -increment.x;
             }
             if ((spritePosition.y + (size.y / 20) >
-                     windowSize.y - 300 &&
+                     windowSize.y - 400 &&
                  increment.y > 0) ||
                 (spritePosition.y - (size.y / 20) < 0 &&
                  increment.y < 0))
