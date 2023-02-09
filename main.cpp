@@ -4,8 +4,7 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
-bool isInArea(sf::Vector2i mousePos, sf::Vector2f otherPos)
-{
+bool isInArea(sf::Vector2i mousePos, sf::Vector2f otherPos) {
     return (abs(mousePos.x - otherPos.x) < 80) && (abs(mousePos.y - otherPos.y) < 110);
 }
 bool comp(int a, int b)
@@ -157,8 +156,9 @@ int main()
                 sprite.setPosition(rand() % window.getSize().x + 100, (window.getSize().y - 300));
                 clicks += 1;
                 double roundedClicks = clicks / 20;
-                increment.y *= min(std::max(roundedClicks, 1.0), 1.03);
-                increment.x *= min(std::max(roundedClicks, 1.0), 1.03); // speed up if
+                increment.y *= min(std::max(roundedClicks, 1.0), 1.05);
+                cout << min(std::max(roundedClicks, 1.0), 1.05);
+                            increment.x *= min(std::max(roundedClicks, 1.0), 1.03); // speed up if
             }
             if (level == 1) {
                 texture.loadFromFile("assets/tinted.png");
@@ -173,8 +173,14 @@ int main()
         window.draw(text);
         if (clicks == 100)
         {
+            if (level == 1) {
+                clicks = 0;
+                level = 0;
+                continue;
+            }
             level++;
             clicks = 0;
+
         }
         // Update the window
         window.display();
